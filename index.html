@@ -1,86 +1,163 @@
 <!DOCTYPE html>
-<html lang="en-US">
-  <head>
-    <meta charset="UTF-8">
-    <link rel="icon" href="/favicon.ico">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="DW PPT Editor - Online presentation tool for creating, editing, and presenting slides. Supports PPT export and AI generation." />
-    <meta name="keywords" content="pptist, ppt, powerpoint, online ppt, slides, presentation, dw editor" />
-    <title>DW PPT Editor</title>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <style>
-      .first-screen-loading {
-        width: 200px;
-        height: 200px;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        margin-top: -100px;
-        margin-left: -100px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-      .first-screen-loading-spinner {
-        width: 36px;
-        height: 36px;
-        border: 3px solid #d14424;
-        border-top-color: transparent;
-        border-radius: 50%;
-        box-sizing: border-box;
-        animation: spinner .8s linear infinite;
-      }
-      .first-screen-loading-text {
-        margin-top: 20px;
-        color: #d14424;
-        font-family: sans-serif;
-      }
-      @keyframes spinner {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
-      }
-      /* Google Translate bar ko hide karne ke liye (Optional) */
-      .goog-te-banner-frame.skiptranslate { display: none !important; } 
-      body { top: 0px !important; }
-    </style>
+  <!-- SEO -->
+  <meta name="description" content="DW PPT Editor - Advanced AI Powered Online Presentation Builder" />
+  <meta name="keywords" content="ppt editor, ai ppt generator, slides, presentation tool" />
+  <meta name="author" content="DW Editor" />
 
-    <script type="text/javascript">
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement({
-          pageLanguage: 'zh-CN', 
-          includedLanguages: 'en', 
-          layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-          autoDisplay: true
-        }, 'google_translate_element');
-        
-        // Force translation to English after a small delay
-        setTimeout(function() {
-          var select = document.querySelector('select.goog-te-combo');
-          if (select) {
-            select.value = 'en';
-            select.dispatchEvent(new Event('change'));
-          }
-        }, 1000);
-      }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
-  </head>
-  <body>
-    <div id="google_translate_element" style="display:none;"></div>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#0f172a" />
 
-    <div id="app">
-      <div class="first-screen-loading">
-        <div class="first-screen-loading-spinner"></div>
-        <div class="first-screen-loading-text">Loading, please wait...</div>
-      </div>
-    </div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+  <!-- Icon -->
+  <link rel="icon" href="/favicon.ico" />
 
+  <title>DW PPT Editor - Advanced</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* Loader Container */
+    .loader-container {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(135deg, #020617, #0f172a);
+      z-index: 9999;
+    }
+
+    /* Animated Ring */
+    .ring {
+      width: 80px;
+      height: 80px;
+      border: 6px solid rgba(255,255,255,0.1);
+      border-top: 6px solid #38bdf8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    /* Glow Text */
+    .loading-text {
+      margin-top: 20px;
+      font-size: 18px;
+      letter-spacing: 1px;
+      color: #38bdf8;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%,100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* Hide Google bar */
+    .goog-te-banner-frame.skiptranslate {
+      display: none !important;
+    }
+    body {
+      top: 0 !important;
+    }
+
+    /* App container */
+    #app {
+      height: 100vh;
+      width: 100%;
+    }
+  </style>
+
+  <!-- Google Translate -->
   <script>
-    document.oncontextmenu = e => e.preventDefault()
+    function googleTranslateElementInit() {
+      new google.translate.TranslateElement({
+        pageLanguage: 'auto',
+        includedLanguages: 'en,hi',
+        autoDisplay: false
+      }, 'google_translate_element');
+
+      setTimeout(() => {
+        const select = document.querySelector('.goog-te-combo');
+        if (select) {
+          select.value = 'en';
+          select.dispatchEvent(new Event('change'));
+        }
+      }, 1500);
+    }
   </script>
+
+  <script src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+</head>
+
+<body>
+
+  <!-- Hidden Translate -->
+  <div id="google_translate_element" style="display:none;"></div>
+
+  <!-- Loader -->
+  <div class="loader-container" id="loader">
+    <div class="ring"></div>
+    <div class="loading-text">Launching DW PPT Editor...</div>
+  </div>
+
+  <!-- App Root -->
+  <div id="app"></div>
+
+  <!-- Main App -->
+  <script type="module" src="/src/main.ts"></script>
+
+  <!-- Advanced JS -->
+  <script>
+    // Disable Right Click
+    document.addEventListener("contextmenu", e => e.preventDefault());
+
+    // DevTools Detection (basic)
+    setInterval(() => {
+      if (window.outerWidth - window.innerWidth > 160) {
+        console.log("DevTools detected");
+      }
+    }, 1000);
+
+    // Loader Hide when App Loads
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("loader").style.opacity = "0";
+        setTimeout(() => {
+          document.getElementById("loader").remove();
+        }, 500);
+      }, 1200);
+    });
+
+    // Service Worker (PWA)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log("Service Worker Registered"));
+    }
+  </script>
+
+</body>
 </html>
